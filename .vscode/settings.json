@@ -154,5 +154,6 @@
     "**/zshenv": true,
     "**/*.zsh-theme": true
   },
-  "ros.distro": "jazzy"
+  "ros.distro": "jazzy",
+  "cmake.sourceDirectory": "/home/neo/workspace/src/resource_monitor"
 }
