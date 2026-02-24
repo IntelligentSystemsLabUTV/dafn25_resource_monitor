@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 
-ResourceMonitorPublisher::ResourceMonitorPublisher()
-: Node("resource_monitor")
+namespace resource_monitor {
+
+ResourceMonitorPublisher::ResourceMonitorPublisher(const rclcpp::NodeOptions & node_opts)
+: Node("resource_monitor", node_opts)
 {
         // Parametri
   this->declare_parameter<bool>("autostart", true);
@@ -81,7 +83,7 @@ void ResourceMonitorPublisher::timerCallback()
   mem_msg.data = mem_usage;
   mem_pub_->publish(mem_msg);
 
-  RCLCPP_INFO(this->get_logger(), "CPU: %.2f%%, MEM: %.2f%%", cpu_usage, mem_usage);
+  // RCLCPP_INFO(this->get_logger(), "CPU: %.2f%%, MEM: %.2f%%", cpu_usage, mem_usage);
 }
 
     // === Calcolo CPU usage ===
@@ -131,13 +133,9 @@ double ResourceMonitorPublisher::getMemoryUsage()
 
   uint64_t used_memory = mem_total - mem_available;
   return  100.0 * used_memory / mem_total;
+};
+
 }
 
-int main(int argc, char **argv)
-{
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<ResourceMonitorPublisher>();
-  rclcpp::spin(node);
-  rclcpp::shutdown();
-  return 0;
-}
+// #include <rclcpp_components/register_node_macro.hpp>
+// RCLCPP_COMPONENTS_REGISTER_NODE(resource_monitor::ResourceMonitorPublisher)

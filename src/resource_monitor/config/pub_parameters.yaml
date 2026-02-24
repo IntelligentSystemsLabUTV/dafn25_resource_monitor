@@ -1,0 +1,4 @@
+pub:
+  ros__parameters:
+    autostart: true
+    "sampling.period": 1000

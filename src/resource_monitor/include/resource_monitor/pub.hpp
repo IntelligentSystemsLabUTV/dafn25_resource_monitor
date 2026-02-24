@@ -7,6 +7,8 @@
 #include <std_msgs/msg/float64.hpp>
 #include <std_srvs/srv/set_bool.hpp>
 
+namespace resource_monitor {
+
 struct CpuTimes
 {
   uint64_t user = 0, nice = 0, system = 0, idle = 0;
@@ -25,7 +27,7 @@ struct CpuTimes
 
 class ResourceMonitorPublisher : public rclcpp::Node {
 public:
-    ResourceMonitorPublisher();
+    ResourceMonitorPublisher(const rclcpp::NodeOptions & node_opts);
 
 private:
     // Publisher
@@ -65,5 +67,7 @@ private:
     // === Calcolo MEM usage ===
     double getMemoryUsage();
 };
+
+}
 
 #endif

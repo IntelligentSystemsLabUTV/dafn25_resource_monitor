@@ -12,6 +12,8 @@ ResourceMonitorSubscriber::ResourceMonitorSubscriber()
             "/resource_monitor/memory_usage", 10,
             std::bind(&ResourceMonitorSubscriber::memCallback, this, std::placeholders::_1)
   );
+
+  RCLCPP_INFO(this->get_logger(), "Subscriber started.");
 }
 
 void ResourceMonitorSubscriber::cpuCallback(const std_msgs::msg::Float64::SharedPtr msg)
