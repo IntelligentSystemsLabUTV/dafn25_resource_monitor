@@ -1,7 +1,10 @@
 #include "../include/resource_monitor/sub.hpp"
 
-ResourceMonitorSubscriber::ResourceMonitorSubscriber()
-: Node("subscriber")
+namespace resource_monitor {
+
+
+ResourceMonitorSubscriber::ResourceMonitorSubscriber(const rclcpp::NodeOptions & node_opts)
+: Node("subscriber", node_opts)
 {
   cpu_sub_ = this->create_subscription<std_msgs::msg::Float64>(
             "/resource_monitor/cpu_usage", 10,
@@ -26,11 +29,7 @@ void ResourceMonitorSubscriber::memCallback(const std_msgs::msg::Float64::Shared
   RCLCPP_INFO(this->get_logger(), "Memory usage: %.2f%%", msg->data);
 }
 
-int main(int argc, char **argv)
-{
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<ResourceMonitorSubscriber>();
-  rclcpp::spin(node);
-  rclcpp::shutdown();
-  return 0;
 }
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(resource_monitor::ResourceMonitorSubscriber)

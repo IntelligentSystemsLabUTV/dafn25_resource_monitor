@@ -19,7 +19,7 @@ def generate_launch_description():
     # Configure publisher node
     pub = Node(
         package='resource_monitor',
-        executable='pub',
+        executable='pub_app',
         name='pub',
         shell=True,
         emulate_tty=True,
@@ -35,7 +35,7 @@ def generate_launch_description():
     # Configure subscriber node
     sub = Node(
         package='resource_monitor',
-        executable='sub',
+        executable='sub_app',
         name='sub',
         shell=True,
         emulate_tty=True,

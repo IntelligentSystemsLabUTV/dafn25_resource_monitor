@@ -8,7 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-# find_package(rclcpp_components REQUIRED)
+find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 # uncomment the following section in order to fill in
@@ -24,10 +24,10 @@ target_include_directories(pub PUBLIC
 ament_target_dependencies(
   pub
   rclcpp
-  # rclcpp_components
+  rclcpp_components
   std_msgs
   std_srvs)
-# rclcpp_components_register_nodes(pub "resource_monitor::ResourceMonitorPublisher")
+rclcpp_components_register_nodes(pub "resource_monitor::ResourceMonitorPublisher")
 
 add_executable(pub_app src/pub_main.cpp)
 target_include_directories(pub_app PUBLIC
@@ -39,24 +39,43 @@ ament_target_dependencies(
   pub_app
   rclcpp)
 
-add_executable(sub src/sub.cpp)
+# Sub component
+add_library(sub SHARED src/sub.cpp)
+target_compile_definitions(sub PRIVATE COMPOSITION_BUILDING_DLL)
 target_include_directories(sub PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
-target_compile_features(sub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+  $<INSTALL_INTERFACE:include>)
 ament_target_dependencies(
   sub
   rclcpp
-  std_msgs)
+  rclcpp_components
+  std_msgs
+  std_srvs)
+rclcpp_components_register_nodes(sub "resource_monitor::ResourceMonitorSubscriber")
+
+add_executable(sub_app src/sub_main.cpp)
+target_include_directories(sub_app PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+target_compile_features(sub_app PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_link_libraries(sub_app sub)
+ament_target_dependencies(
+  sub_app
+  rclcpp)
 
 install(TARGETS pub
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+install(TARGETS sub
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 install(TARGETS pub_app
   DESTINATION lib/${PROJECT_NAME})
-install(TARGETS sub
+install(TARGETS sub_app
   DESTINATION lib/${PROJECT_NAME})
 
 # Launch

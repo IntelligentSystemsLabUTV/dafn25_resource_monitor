@@ -137,5 +137,5 @@ double ResourceMonitorPublisher::getMemoryUsage()
 
 }
 
-// #include <rclcpp_components/register_node_macro.hpp>
-// RCLCPP_COMPONENTS_REGISTER_NODE(resource_monitor::ResourceMonitorPublisher)
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(resource_monitor::ResourceMonitorPublisher)
